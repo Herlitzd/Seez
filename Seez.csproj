@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <AzureFunctionsVersion></AzureFunctionsVersion>
+  </PropertyGroup>
+  <PropertyGroup>
+       <UserSecretsId>06f5a586-c6f7-4c0d-bfac-08924dec3807</UserSecretsId>
+    </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="CoreCompat.System.Drawing.v2" Version="5.2.0-preview1-r131" />
+    <PackageReference Include="Microsoft.Azure.CognitiveServices.Vision.ComputerVision" Version="3.2.0" />
+    <PackageReference Include="Microsoft.NET.Sdk.Functions" Version="1.0.14" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="host.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="local.settings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory>Never</CopyToPublishDirectory>
+    </None>
+  </ItemGroup>
+</Project>

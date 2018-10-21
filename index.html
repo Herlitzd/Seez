@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Page Title</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <form id="form" enctype="multipart/form-data">
+    <input type="file" id="file" name="receipt" />
+    <input type="submit" id="sub" />
+  </form>
+  <img id="img" style="display: none" alt="nada" src="">
+  <canvas id="canvas" width="800" height="1000"></canvas>
+  <script lang="js">
+    $(function () {
+      var canvas = document.getElementById('canvas');
+      var context = canvas.getContext('2d');
+      // context.drawImage(img, 0, 0, 637, 850);
+      $("#file").change(function () {
+        var files = document.getElementById('file').files;
+        if (FileReader && files && files.length) {
+          var fr = new FileReader();
+          fr.onload = function (evt) {
+            if (evt.target.readyState == FileReader.DONE) {
+              var img = document.getElementById('img');
+              img.onload = (e => {
+                context.drawImage(img, 0, 0);
+              });
+              img.src = evt.target.result;
+            }
+          };
+          fr.readAsDataURL(files[0]);
+        }
+      });
+
+      $("#form").submit(function (e) {
+        e.preventDefault();
+        var formData = new FormData(this);
+
+
+
+        $.ajax({
+          url: "http://localhost:7071/api/ParseReceipt",
+          type: 'POST',
+          data: formData,
+          success: function (data) {
+            data = JSON.parse(data);
+            data[1].forEach(box => {
+              let coords = box.boundingBox.split(',').map(x => parseInt(x));
+              context.beginPath();
+              context.rect(...coords);
+              // context.fillStyle = 'yellow';
+              // context.fill();
+              var back = ["#ff0000", "#0800ff"];
+              var rand = back[Math.floor(Math.random() * back.length)];
+              context.lineWidth = 7;
+              context.strokeStyle = rand;
+              context.stroke();
+            });
+            debugger;
+            console.log(data[0]);
+            alert(data)
+          },
+          cache: false,
+          contentType: false,
+          processData: false
+        });
+      });
+    });
+
+  </script>
+</head>
+
+<body>
+
+</body>
+
+</html>
